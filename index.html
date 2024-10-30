@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+
+        .quiz-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .question {
+            margin-bottom: 10px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="radio"] {
+            margin-right: 5px;
+        }
+
+        button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>Welcome to GK Competition</h1>
+        <form id="login-form">
+            <label for="username">Username:</label>
+            <input type="text" id="username" required><br>
+            <label for="password">Password:</label>
+            <input type="password" id="password" required><br>
+            <button type="button" onclick="checkCredentials()">Login</button>
+        </form>
+        <div id="quiz" style="display: none;">
+            <form id="quiz-form">
+                <div class="question">
+                    <p>1. What is the capital of France?</p>
+                    <label><input type="radio" name="q1" value="London"> London</label>
+                    <label><input type="radio" name="q1" value="Paris"> Paris</label>
+                    <label><input type="radio" name="q1" value="Berlin"> Berlin</label>
+                    <label><input type="radio" name="q1" value="Rome"> Rome</label>
+                </div>
+                <div class="question">
+                    <p>2. What is 2 + 2?</p>
+                    <label><input type="radio" name="q2" value="3"> 3</label>
+                    <label><input type="radio" name="q2" value="4"> 4</label>
+                    <label><input type="radio" name="q2" value="5"> 5</label>
+                    <label><input type="radio" name="q2" value="6"> 6</label>
+                </div>
+                <!-- Add more questions here -->
+            </form>
+            <button onclick="checkAnswers()">Check Answers</button>
+            <div id="mistakes" style="display: none;"></div>
+        </div>
+    </div>
+    <script>
+        function checkCredentials() {
+            let username = document.getElementById("username").value;
+            let password = document.getElementById("password").value;
+            if (username === "dewsoft" && password === "12345") {
+                document.getElementById('login-form').style.display = 'none';
+                document.getElementById('quiz').style.display = 'block';
+            } else {
+                alert("Incorrect username or password. Please try again.");
+            }
+        }
+
+        function checkAnswers() {
+            const form = document.getElementById('quiz-form');
+            const inputs = form.getElementsByTagName('input');
+            let correctAnswers = 0;
+            let mistakes = '';
+
+            for (let i = 0; i < inputs.length; i++) {
+                const input = inputs[i];
+                if (input.checked) {
+                    const questionNumber = input.name.substring(1);
+                    const correctAnswer = getCorrectAnswer(questionNumber);
+                    if (input.value === correctAnswer) {
+                        correctAnswers++;
+                    } else {
+                        mistakes += `Q${questionNumber}: ${input.value} (Correct answer: ${correctAnswer})\n`;
+                    }
+                }
+            }
+
+            const totalQuestions = form.getElementsByClassName('question').length;
+            const percentage = (correctAnswers / totalQuestions) * 100;
+
+            let resultMessage = `You answered ${correctAnswers} out of ${totalQuestions} questions correctly.\nYour percentage is ${percentage.toFixed(2)}%\n`;
+
+            if (mistakes !== '') {
+                resultMessage += '\nMistakes:\n' + mistakes;
+                document.getElementById('mistakes').innerText = resultMessage;
+                document.getElementById('mistakes').style.display = 'block';
+            } else {
+                alert(resultMessage);
+            }
+        }
+
+        function getCorrectAnswer(questionNumber) {
+            switch (questionNumber) {
+                case '1':
+                    return 'Paris';
+                case '2':
+                    return '4';
+                // Add more cases for additional questions
+                default:
+                    return '';
+            }
+        }
+    </script>
+</body>
+</html>
